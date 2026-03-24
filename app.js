@@ -14,8 +14,8 @@ app.use(
   }),
 );
 
-// import authRoutes from "./routes/authRoutes.js";
-// app.use("/api/auth", authRoutes);
+import authRoutes from "./routes/authRoutes.js";
+app.use("/api/auth", authRoutes);
 
 app.use(express.json());
 app.use(cookieParser());
