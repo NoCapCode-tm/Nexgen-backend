@@ -1,0 +1,31 @@
+import mongoose from "mongoose";
+
+const SignerSchema = new mongoose.Schema(
+  {
+    document: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Document",
+      required: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }, // this is optional
+    status: {
+      type: String,
+      enum: ["pending", "signed"],
+      default: "pending",
+    },
+    widget: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Widget",
+    },
+    // signingOrder: {
+    //   type: Number,
+    //   default: 0,
+    // },
+  },
+  { timestamps: true },
+);
+
+export default mongoose.model("Signer", SignerSchema);
