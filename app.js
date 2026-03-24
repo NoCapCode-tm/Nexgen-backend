@@ -7,6 +7,9 @@ const app = express();
 
 const ClientUrl = process.env.REACT_PUBLIC_CLIENT;
 
+app.use(express.json());
+app.use(cookieParser());
+
 app.use(
   cors({
     origin: ClientUrl, // your frontend
@@ -16,8 +19,5 @@ app.use(
 
 import authRoutes from "./routes/authRoutes.js";
 app.use("/api/auth", authRoutes);
-
-app.use(express.json());
-app.use(cookieParser());
 
 export default app;
