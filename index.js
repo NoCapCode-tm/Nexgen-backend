@@ -3,7 +3,7 @@ import connectDB from "./lib/db.js";
 
 const PORT = process.env.PORT;
 
-// connectDB();
+connectDB();
 
 app.get("/", (req, res) => {
   res.send("Server is running");
