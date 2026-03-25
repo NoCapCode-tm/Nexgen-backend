@@ -18,6 +18,9 @@ app.use(
 );
 
 import authRoutes from "./routes/authRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
+
 app.use("/api/auth", authRoutes);
+app.use("/api/contacts", contactRoutes);
 
 export default app;

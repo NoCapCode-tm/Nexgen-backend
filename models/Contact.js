@@ -8,6 +8,11 @@ const contactSchema = new mongoose.Schema(
     email: {
       type: String,
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true },
 );
