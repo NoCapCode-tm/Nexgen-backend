@@ -198,3 +198,204 @@ All authentication endpoints are working:
 * Login ✅
 * Logout ✅
 * Get Current User ✅
+
+
+# 📇 Contact API Documentation
+
+This section describes the APIs used to manage user contacts (signers).
+
+---
+
+## 🌐 Base URL
+
+```
+http://localhost:5000/api/contacts
+```
+
+---
+
+## 🔐 Authentication
+
+* All routes are **protected**
+* Requires valid JWT stored in **HTTP-only cookies**
+* Frontend must send cookies with requests
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Create Contact
+
+**POST** `/`
+
+Create a new contact.
+
+#### Request Body
+
+```json
+{
+  "name": "Rahul",
+  "email": "rahul@gmail.com"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "contact": {
+    "_id": "contact_id",
+    "name": "Rahul",
+    "email": "rahul@gmail.com",
+    "owner": "user_id"
+  }
+}
+```
+
+---
+
+### ✅ 2. Get All Contacts
+
+**GET** `/`
+
+Fetch all contacts of the logged-in user.
+
+#### Response
+
+```json
+{
+  "success": true,
+  "contacts": [
+    {
+      "_id": "contact_id",
+      "name": "Rahul",
+      "email": "rahul@gmail.com"
+    }
+  ]
+}
+```
+
+#### Notes
+
+* Returns empty array if no contacts exist
+* Contacts are sorted by latest created
+
+---
+
+### ✅ 3. Update Contact
+
+**PATCH** `/:id`
+
+Update an existing contact.
+
+#### Request Body
+
+```json
+{
+  "name": "Rahul Sharma",
+  "email": "rahul.sharma@gmail.com"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "contact": {
+    "_id": "contact_id",
+    "name": "Rahul Sharma",
+    "email": "rahul.sharma@gmail.com"
+  }
+}
+```
+
+#### Errors
+
+```json
+{
+  "message": "Contact not found"
+}
+```
+
+---
+
+### ✅ 4. Delete Contact
+
+**DELETE** `/:id`
+
+Delete a contact.
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Contact deleted"
+}
+```
+
+#### Errors
+
+```json
+{
+  "message": "Contact not found"
+}
+```
+
+---
+
+## ⚠️ Important Notes
+
+* Each contact is linked to a specific user (`owner`)
+* Users can only:
+
+  * View their own contacts
+  * Update their own contacts
+  * Delete their own contacts
+
+---
+
+## 🔐 Security
+
+* Protected using authentication middleware
+* Ensures user-specific data isolation
+* Prevents unauthorized access to other users' contacts
+
+---
+
+## 🧪 Testing Tips
+
+* Login first to receive cookie
+* Use tools like Postman or frontend with:
+
+```js
+fetch(url, {
+  credentials: "include"
+});
+```
+
+---
+
+## 🚀 Use Case
+
+Contacts are used when:
+
+* Adding signers to documents
+* Selecting frequent recipients quickly
+* Improving user experience in document workflows
+
+---
+
+## ✅ Status
+
+All Contact APIs are working:
+
+* Create Contact ✅
+* Get Contacts ✅
+* Update Contact ✅
+* Delete Contact ✅
+
