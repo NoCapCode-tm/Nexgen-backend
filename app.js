@@ -19,8 +19,10 @@ app.use(
 
 import authRoutes from "./routes/authRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import documentRoutes from "./routes/documentRoutes.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactRoutes);
+app.use("/api/documents", documentRoutes);
 
 export default app;
