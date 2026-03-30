@@ -646,3 +646,193 @@ All Document APIs are working:
 * Get Single Document ✅
 * Update Document ✅
 * Delete Document ✅
+
+# ✍️ Signer API Documentation
+
+This section describes the APIs used to manage signers for documents.
+
+---
+
+## 🌐 Base URL
+
+```id="k5z2o1"
+http://localhost:5000/api
+```
+
+---
+
+## 🔐 Authentication
+
+* All routes are **protected**
+* Requires valid JWT stored in **HTTP-only cookies**
+* Frontend must send credentials with requests
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Add Signer
+
+**POST** `/documents/:id/signers`
+
+Add a signer to a document.
+
+---
+
+## 🔹 Request Options
+
+You can add a signer in two ways:
+
+---
+
+### Option 1: Manual Entry
+
+```json id="0ntk0g"
+{
+  "name": "Rahul",
+  "email": "rahul@gmail.com"
+}
+```
+
+---
+
+### Option 2: From Contact
+
+```json id="fxa7s8"
+{
+  "contactId": "contact_id_here"
+}
+```
+
+---
+
+## 🔹 Response
+
+```json id="5rz41k"
+{
+  "success": true,
+  "signer": {
+    "_id": "signer_id",
+    "document": "document_id",
+    "name": "Rahul",
+    "email": "rahul@gmail.com",
+    "status": "pending"
+  }
+}
+```
+
+---
+
+## 🔹 Errors
+
+```json id="v2n12l"
+{
+  "message": "Document not found"
+}
+```
+
+```json id="0j9kdy"
+{
+  "message": "Contact not found"
+}
+```
+
+```json id="vfp8ov"
+{
+  "message": "Email is required"
+}
+```
+
+---
+
+## 🧠 Notes
+
+* A signer represents a person who needs to sign the document
+* Signers are linked to a specific document
+* Default status is `pending`
+* Data is copied from contact (if used) to ensure immutability
+
+---
+
+---
+
+### ✅ 2. Get Signers for Document
+
+**GET** `/documents/:id/signers`
+
+Fetch all signers assigned to a document.
+
+---
+
+## 🔹 Response
+
+```json id="5rjgxb"
+{
+  "success": true,
+  "signers": [
+    {
+      "_id": "signer_id",
+      "name": "Rahul",
+      "email": "rahul@gmail.com",
+      "status": "pending"
+    }
+  ]
+}
+```
+
+---
+
+## 🔹 Errors
+
+```json id="okn64j"
+{
+  "message": "Document not found"
+}
+```
+
+---
+
+## ⚠️ Important Notes
+
+* Only the document owner can:
+
+  * Add signers
+  * View signers
+* A document can have multiple signers
+* Signers are stored independently of contacts
+
+---
+
+## 🔐 Security
+
+* Protected using authentication middleware
+* Ensures only authorized users can manage signers
+
+---
+
+## 🔄 Workflow
+
+```text id="kq59tc"
+Create Document → Add Signers → Send Document → Signers Sign
+```
+
+---
+
+## 🚀 Use Case
+
+Signers are used to:
+
+* Assign recipients for document signing
+* Track signing progress
+* Manage document workflow
+
+---
+
+## ✅ Status
+
+All Signer APIs are working:
+
+* Add Signer (manual + contact) ✅
+* Get Signers ✅
