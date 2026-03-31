@@ -25,7 +25,7 @@ const SignerSchema = new mongoose.Schema(
     },
     widget: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Widget",
+      ref: "Widgets",
     },
     // signingOrder: {
     //   type: Number,
