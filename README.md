@@ -655,7 +655,7 @@ This section describes the APIs used to manage signers for documents.
 
 ## 🌐 Base URL
 
-```id="k5z2o1"
+```
 http://localhost:5000/api
 ```
 
@@ -689,7 +689,7 @@ You can add a signer in two ways:
 
 ### Option 1: Manual Entry
 
-```json id="0ntk0g"
+```
 {
   "name": "Rahul",
   "email": "rahul@gmail.com"
@@ -700,7 +700,7 @@ You can add a signer in two ways:
 
 ### Option 2: From Contact
 
-```json id="fxa7s8"
+```
 {
   "contactId": "contact_id_here"
 }
@@ -710,7 +710,7 @@ You can add a signer in two ways:
 
 ## 🔹 Response
 
-```json id="5rz41k"
+```
 {
   "success": true,
   "signer": {
@@ -727,19 +727,19 @@ You can add a signer in two ways:
 
 ## 🔹 Errors
 
-```json id="v2n12l"
+```
 {
   "message": "Document not found"
 }
 ```
 
-```json id="0j9kdy"
+```
 {
   "message": "Contact not found"
 }
 ```
 
-```json id="vfp8ov"
+```
 {
   "message": "Email is required"
 }
@@ -768,7 +768,7 @@ Fetch all signers assigned to a document.
 
 ## 🔹 Response
 
-```json id="5rjgxb"
+```
 {
   "success": true,
   "signers": [
@@ -786,7 +786,7 @@ Fetch all signers assigned to a document.
 
 ## 🔹 Errors
 
-```json id="okn64j"
+```
 {
   "message": "Document not found"
 }
@@ -814,7 +814,7 @@ Fetch all signers assigned to a document.
 
 ## 🔄 Workflow
 
-```text id="kq59tc"
+```
 Create Document → Add Signers → Send Document → Signers Sign
 ```
 
