@@ -1,6 +1,6 @@
 import Template from "../models/Template.js";
 
-// ✅ Create Template
+// Create Template
 export const createTemplate = async (req, res) => {
   try {
     const { title, fileUrl, widgets } = req.body;
@@ -27,7 +27,7 @@ export const createTemplate = async (req, res) => {
   }
 };
 
-// ✅ Get All Templates (user-specific)
+// Get All Templates (user-specific)
 export const getTemplates = async (req, res) => {
   try {
     const templates = await Template.find({
@@ -43,7 +43,7 @@ export const getTemplates = async (req, res) => {
   }
 };
 
-// ✅ Get Single Template
+// Get Single Template
 export const getTemplateById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -66,7 +66,7 @@ export const getTemplateById = async (req, res) => {
   }
 };
 
-// ✅ Delete Template
+// Delete Template
 export const deleteTemplate = async (req, res) => {
   try {
     const { id } = req.params;
@@ -89,7 +89,7 @@ export const deleteTemplate = async (req, res) => {
   }
 };
 
-// ✅ Update Template (optional but useful)
+// Update Template (optional but useful)
 export const updateTemplate = async (req, res) => {
   try {
     const { id } = req.params;

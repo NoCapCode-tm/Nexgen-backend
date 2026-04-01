@@ -1,6 +1,6 @@
 import { Document } from "../models/Document.js";
 
-// ✅ Create Document
+// Create Document
 export const createDocument = async (req, res) => {
   try {
     const { title, content, fileUrl } = req.body;
@@ -27,7 +27,7 @@ export const createDocument = async (req, res) => {
   }
 };
 
-// ✅ Get All Documents (for logged-in user)
+// Get All Documents (for logged-in user)
 export const getDocuments = async (req, res) => {
   try {
     const documents = await Document.find({
@@ -43,7 +43,7 @@ export const getDocuments = async (req, res) => {
   }
 };
 
-// ✅ Get Single Document
+// Get Single Document
 export const getDocumentById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -68,7 +68,7 @@ export const getDocumentById = async (req, res) => {
   }
 };
 
-// ✅ Update Document
+// Update Document
 export const updateDocument = async (req, res) => {
   try {
     const { id } = req.params;
@@ -92,7 +92,7 @@ export const updateDocument = async (req, res) => {
   }
 };
 
-// ✅ Delete Document
+// Delete Document
 export const deleteDocument = async (req, res) => {
   try {
     const { id } = req.params;

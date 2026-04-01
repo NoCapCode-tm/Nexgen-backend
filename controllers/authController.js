@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/User.js";
 import { generateToken } from "../lib/generateToken.js";
 
-// 🔐 Helper to set cookie
+// Helper to set cookie
 const setCookie = (res, token) => {
   const isProduction = process.env.NODE_ENV === "production";
 
@@ -14,7 +14,7 @@ const setCookie = (res, token) => {
   });
 };
 
-// ✅ SIGNUP
+// SIGNUP
 export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -60,7 +60,7 @@ export const signup = async (req, res) => {
   }
 };
 
-// ✅ LOGIN
+// LOGIN
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -102,7 +102,7 @@ export const login = async (req, res) => {
   }
 };
 
-// ✅ LOGOUT
+// LOGOUT
 export const logout = async (req, res) => {
   try {
     res.cookie("token", "", {
@@ -119,7 +119,7 @@ export const logout = async (req, res) => {
   }
 };
 
-// ✅ GET CURRENT USER
+// GET CURRENT USER
 export const getMe = async (req, res) => {
   try {
     res.json({
