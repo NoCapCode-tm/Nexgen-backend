@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import widgetSchema from "./Widgets.js";
 
 const templateSchema = new mongoose.Schema(
   {
@@ -12,11 +13,7 @@ const templateSchema = new mongoose.Schema(
       required: true,
     },
 
-    widgets: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Widgets",
-      required: true,
-    },
+    widgets: [widgetSchema],
 
     owner: {
       type: mongoose.Schema.Types.ObjectId,
