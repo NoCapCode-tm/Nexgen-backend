@@ -10,9 +10,11 @@ const templateSchema = new mongoose.Schema(
 
     fileUrl: {
       type: String, // template PDF
+    },
+    content: {
+      type: String,
       required: true,
     },
-
     widgets: [widgetSchema],
 
     owner: {

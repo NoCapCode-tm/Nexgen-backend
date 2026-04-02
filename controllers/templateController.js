@@ -3,17 +3,18 @@ import Template from "../models/Template.js";
 // Create Template
 export const createTemplate = async (req, res) => {
   try {
-    const { title, fileUrl, widgets } = req.body;
+    const { title, fileUrl, content, widgets } = req.body;
 
-    if (!title || !fileUrl) {
+    if (!title || !content) {
       return res
         .status(400)
-        .json({ message: "Title and fileUrl are required" });
+        .json({ message: "Title and content are required" });
     }
 
     const template = await Template.create({
       title,
       fileUrl,
+      content,
       widgets,
       owner: req.user._id,
     });
