@@ -1,6 +1,6 @@
 import { Contact } from "../models/Contact.js";
 
-// ✅ Create Contact
+// Create Contact
 export const createContact = async (req, res) => {
   try {
     const { name, email } = req.body;
@@ -24,7 +24,7 @@ export const createContact = async (req, res) => {
   }
 };
 
-// ✅ Get All Contacts (for logged-in user)
+// Get All Contacts (for logged-in user)
 export const getContacts = async (req, res) => {
   try {
     const contacts = await Contact.find({ owner: req.user._id }).sort({
@@ -40,7 +40,7 @@ export const getContacts = async (req, res) => {
   }
 };
 
-// ✅ Delete Contact
+// Delete Contact
 export const deleteContact = async (req, res) => {
   try {
     const { id } = req.params;
@@ -63,7 +63,7 @@ export const deleteContact = async (req, res) => {
   }
 };
 
-// ✅ Update Contact (Optional)
+// Update Contact (Optional)
 export const updateContact = async (req, res) => {
   try {
     const { id } = req.params;

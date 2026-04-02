@@ -646,3 +646,452 @@ All Document APIs are working:
 * Get Single Document ✅
 * Update Document ✅
 * Delete Document ✅
+
+# ✍️ Signer API Documentation
+
+This section describes the APIs used to manage signers for documents.
+
+---
+
+## 🌐 Base URL
+
+```
+http://localhost:5000/api
+```
+
+---
+
+## 🔐 Authentication
+
+* All routes are **protected**
+* Requires valid JWT stored in **HTTP-only cookies**
+* Frontend must send credentials with requests
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Add Signer
+
+**POST** `/documents/:id/signers`
+
+Add a signer to a document.
+
+---
+
+## 🔹 Request Options
+
+You can add a signer in two ways:
+
+---
+
+### Option 1: Manual Entry
+
+```
+{
+  "name": "Rahul",
+  "email": "rahul@gmail.com"
+}
+```
+
+---
+
+### Option 2: From Contact
+
+```
+{
+  "contactId": "contact_id_here"
+}
+```
+
+---
+
+## 🔹 Response
+
+```
+{
+  "success": true,
+  "signer": {
+    "_id": "signer_id",
+    "document": "document_id",
+    "name": "Rahul",
+    "email": "rahul@gmail.com",
+    "status": "pending"
+  }
+}
+```
+
+---
+
+## 🔹 Errors
+
+```
+{
+  "message": "Document not found"
+}
+```
+
+```
+{
+  "message": "Contact not found"
+}
+```
+
+```
+{
+  "message": "Email is required"
+}
+```
+
+---
+
+## 🧠 Notes
+
+* A signer represents a person who needs to sign the document
+* Signers are linked to a specific document
+* Default status is `pending`
+* Data is copied from contact (if used) to ensure immutability
+
+---
+
+---
+
+### ✅ 2. Get Signers for Document
+
+**GET** `/documents/:id/signers`
+
+Fetch all signers assigned to a document.
+
+---
+
+## 🔹 Response
+
+```
+{
+  "success": true,
+  "signers": [
+    {
+      "_id": "signer_id",
+      "name": "Rahul",
+      "email": "rahul@gmail.com",
+      "status": "pending"
+    }
+  ]
+}
+```
+
+---
+
+## 🔹 Errors
+
+```
+{
+  "message": "Document not found"
+}
+```
+
+---
+
+## ⚠️ Important Notes
+
+* Only the document owner can:
+
+  * Add signers
+  * View signers
+* A document can have multiple signers
+* Signers are stored independently of contacts
+
+---
+
+## 🔐 Security
+
+* Protected using authentication middleware
+* Ensures only authorized users can manage signers
+
+---
+
+## 🔄 Workflow
+
+```
+Create Document → Add Signers → Send Document → Signers Sign
+```
+
+---
+
+## 🚀 Use Case
+
+Signers are used to:
+
+* Assign recipients for document signing
+* Track signing progress
+* Manage document workflow
+
+---
+
+## ✅ Status
+
+All Signer APIs are working:
+
+* Add Signer (manual + contact) ✅
+* Get Signers ✅
+
+# 📑 Template API Documentation
+
+This section describes the APIs used to manage reusable document templates.
+
+---
+
+## 🌐 Base URL
+
+```
+http://localhost:5000/api/templates
+```
+
+---
+
+## 🔐 Authentication
+
+* All routes are **protected**
+* Requires valid JWT stored in **HTTP-only cookies**
+* Frontend must send credentials with requests
+
+---
+
+## 🧠 What is a Template?
+
+A template is a **predefined document layout** that includes:
+
+* A file (PDF)
+* Widgets (fields like signature, name, etc.)
+* Positions for signing
+
+Templates are used to quickly create documents.
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Create Template
+
+**POST** `/`
+
+Create a new template.
+
+#### Request Body
+
+```json
+{
+  "title": "NDA Template",
+  "fileUrl": "https://template.pdf",
+  "widgets": [
+    {
+      "type": "signature",
+      "x": 100,
+      "y": 200,
+      "width": 150,
+      "height": 50,
+      "page": 1,
+      "signerIndex": 0
+    },
+    {
+      "type": "name",
+      "x": 50,
+      "y": 100,
+      "page": 1,
+      "signerIndex": 0
+    }
+  ]
+}
+```
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "template": {
+    "_id": "template_id",
+    "title": "NDA Template",
+    "fileUrl": "https://template.pdf",
+    "widgets": [...],
+    "owner": "user_id"
+  }
+}
+```
+
+---
+
+#### Notes
+
+* `title` and `fileUrl` are required
+* `widgets` define field positions and types
+* `owner` is automatically assigned
+
+---
+
+### ✅ 2. Get All Templates
+
+**GET** `/`
+
+Fetch all templates created by the logged-in user.
+
+#### Response
+
+```json
+{
+  "success": true,
+  "templates": [
+    {
+      "_id": "template_id",
+      "title": "NDA Template"
+    }
+  ]
+}
+```
+
+---
+
+### ✅ 3. Get Single Template
+
+**GET** `/:id`
+
+Fetch a specific template by ID.
+
+#### Response
+
+```json
+{
+  "success": true,
+  "template": {
+    "_id": "template_id",
+    "title": "NDA Template",
+    "widgets": [...]
+  }
+}
+```
+
+---
+
+#### Errors
+
+```json
+{
+  "message": "Template not found"
+}
+```
+
+---
+
+### ✅ 4. Update Template
+
+**PATCH** `/:id`
+
+Update template details.
+
+#### Request Body
+
+```json
+{
+  "title": "Updated Template Name"
+}
+```
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "template": {
+    "_id": "template_id",
+    "title": "Updated Template Name"
+  }
+}
+```
+
+---
+
+### ✅ 5. Delete Template
+
+**DELETE** `/:id`
+
+Delete a template.
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Template deleted"
+}
+```
+
+---
+
+## ⚠️ Important Notes
+
+* Templates are **user-specific**
+* Only the owner can:
+
+  * View templates
+  * Update templates
+  * Delete templates
+* Templates are reusable across multiple documents
+
+---
+
+## 🔐 Security
+
+* Protected using authentication middleware
+* Prevents unauthorized access
+* Ensures data isolation per user
+
+---
+
+## 🔄 Workflow
+
+```text
+Create Template → Use Template → Create Document → Add Signers → Send → Sign
+```
+
+---
+
+## 🧪 Testing Tips
+
+* Login first to get cookie
+* Use Postman or frontend with:
+
+```js
+fetch(url, {
+  credentials: "include"
+});
+```
+
+---
+
+## 🚀 Use Case
+
+Templates help:
+
+* Save time when creating documents
+* Standardize signing layouts
+* Reuse common document formats
+
+---
+
+## ✅ Status
+
+All Template APIs are working:
+
+* Create Template ✅
+* Get Templates ✅
+* Get Single Template ✅
+* Update Template ✅
+* Delete Template ✅

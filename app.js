@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { logger } from "./middleware/logger.js";
 import "dotenv/config";
 
 const app = express();
@@ -16,15 +17,18 @@ app.use(
     credentials: true, // IMPORTANT for cookies
   }),
 );
+app.use(logger);
 
 import authRoutes from "./routes/authRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import documentRoutes from "./routes/documentRoutes.js";
 import signerRoutes from "./routes/signerRoutes.js";
+import templateRoutes from "./routes/templateRoutes.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api", signerRoutes);
+app.use("/api/templates", templateRoutes);
 
 export default app;

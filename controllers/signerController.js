@@ -2,7 +2,7 @@ import Signer from "../models/Signer.js";
 import { Document } from "../models/Document.js";
 import { Contact } from "../models/Contact.js";
 
-// ✅ Add Signer
+// Add Signer
 export const addSigner = async (req, res) => {
   try {
     const { id: documentId } = req.params;
@@ -62,7 +62,7 @@ export const addSigner = async (req, res) => {
   }
 };
 
-// ✅ Get Signers for Document
+// Get Signers for Document
 export const getSigners = async (req, res) => {
   try {
     const { id: documentId } = req.params;
