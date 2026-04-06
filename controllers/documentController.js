@@ -1,4 +1,5 @@
 import { Document } from "../models/Document.js";
+import Template from "../models/Template.js";
 
 // Create Document
 export const createDocument = async (req, res) => {
@@ -109,6 +110,47 @@ export const deleteDocument = async (req, res) => {
     res.json({
       success: true,
       message: "Document deleted",
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Create Document from Template
+export const createDocumentFromTemplate = async (req, res) => {
+  try {
+    const { templateId, title } = req.body;
+
+    if (!templateId) {
+      return res.status(400).json({ message: "templateId is required" });
+    }
+
+    // 1. Fetch template
+    const template = await Template.findOne({
+      _id: templateId,
+      owner: req.user._id,
+    });
+
+    if (!template) {
+      return res.status(404).json({ message: "Template not found" });
+    }
+
+    // 2. Create document (COPY data)
+    const document = await Document.create({
+      title: title || template.title, // allow override
+      fileUrl: template.fileUrl || null,
+      content: template.content || null,
+      owner: req.user._id,
+
+      // IMPORTANT: copy widgets
+      widgets: template.widgets,
+
+      status: "draft",
+    });
+
+    res.status(201).json({
+      success: true,
+      document,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
