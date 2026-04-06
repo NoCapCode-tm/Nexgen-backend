@@ -14,9 +14,9 @@ http://localhost:5000/api/auth
 
 ## 🧾 Authentication Method
 
-* Uses **JWT stored in HTTP-only cookies**
-* Cookies are automatically sent with requests
-* Protected routes require valid authentication
+- Uses **JWT stored in HTTP-only cookies**
+- Cookies are automatically sent with requests
+- Protected routes require valid authentication
 
 ---
 
@@ -56,8 +56,8 @@ Create a new user account.
 
 #### Notes
 
-* Password is hashed before saving
-* Cookie is set after successful signup
+- Password is hashed before saving
+- Cookie is set after successful signup
 
 ---
 
@@ -92,8 +92,8 @@ Authenticate user and set session cookie.
 
 #### Notes
 
-* JWT token is stored in HTTP-only cookie
-* Invalid credentials return error
+- JWT token is stored in HTTP-only cookie
+- Invalid credentials return error
 
 ---
 
@@ -149,32 +149,32 @@ Cookies are required (automatically sent by browser)
 
 ## 🔐 Security Details
 
-* JWT stored in **HTTP-only cookies**
-* Cookies configured with:
+- JWT stored in **HTTP-only cookies**
+- Cookies configured with:
+  - `httpOnly: true`
+  - `sameSite: lax (dev) / none (prod)`
+  - `secure: true (production only)`
 
-  * `httpOnly: true`
-  * `sameSite: lax (dev) / none (prod)`
-  * `secure: true (production only)`
-* Passwords hashed using **bcrypt**
+- Passwords hashed using **bcrypt**
 
 ---
 
 ## ⚠️ Important Notes
 
-* Frontend must include credentials:
+- Frontend must include credentials:
 
 ```js
 fetch(url, {
-  credentials: "include"
+  credentials: "include",
 });
 ```
 
-* CORS must allow credentials:
+- CORS must allow credentials:
 
 ```js
 cors({
   origin: "http://localhost:3000",
-  credentials: true
+  credentials: true,
 });
 ```
 
@@ -182,11 +182,11 @@ cors({
 
 ## 🚀 Tech Stack
 
-* Node.js
-* Express.js
-* MongoDB + Mongoose
-* JWT Authentication
-* bcrypt for password hashing
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- JWT Authentication
+- bcrypt for password hashing
 
 ---
 
@@ -194,11 +194,10 @@ cors({
 
 All authentication endpoints are working:
 
-* Signup ✅
-* Login ✅
-* Logout ✅
-* Get Current User ✅
-
+- Signup ✅
+- Login ✅
+- Logout ✅
+- Get Current User ✅
 
 # 📇 Contact API Documentation
 
@@ -216,9 +215,9 @@ http://localhost:5000/api/contacts
 
 ## 🔐 Authentication
 
-* All routes are **protected**
-* Requires valid JWT stored in **HTTP-only cookies**
-* Frontend must send cookies with requests
+- All routes are **protected**
+- Requires valid JWT stored in **HTTP-only cookies**
+- Frontend must send cookies with requests
 
 ---
 
@@ -280,8 +279,8 @@ Fetch all contacts of the logged-in user.
 
 #### Notes
 
-* Returns empty array if no contacts exist
-* Contacts are sorted by latest created
+- Returns empty array if no contacts exist
+- Contacts are sorted by latest created
 
 ---
 
@@ -350,31 +349,30 @@ Delete a contact.
 
 ## ⚠️ Important Notes
 
-* Each contact is linked to a specific user (`owner`)
-* Users can only:
-
-  * View their own contacts
-  * Update their own contacts
-  * Delete their own contacts
+- Each contact is linked to a specific user (`owner`)
+- Users can only:
+  - View their own contacts
+  - Update their own contacts
+  - Delete their own contacts
 
 ---
 
 ## 🔐 Security
 
-* Protected using authentication middleware
-* Ensures user-specific data isolation
-* Prevents unauthorized access to other users' contacts
+- Protected using authentication middleware
+- Ensures user-specific data isolation
+- Prevents unauthorized access to other users' contacts
 
 ---
 
 ## 🧪 Testing Tips
 
-* Login first to receive cookie
-* Use tools like Postman or frontend with:
+- Login first to receive cookie
+- Use tools like Postman or frontend with:
 
 ```js
 fetch(url, {
-  credentials: "include"
+  credentials: "include",
 });
 ```
 
@@ -384,9 +382,9 @@ fetch(url, {
 
 Contacts are used when:
 
-* Adding signers to documents
-* Selecting frequent recipients quickly
-* Improving user experience in document workflows
+- Adding signers to documents
+- Selecting frequent recipients quickly
+- Improving user experience in document workflows
 
 ---
 
@@ -394,11 +392,10 @@ Contacts are used when:
 
 All Contact APIs are working:
 
-* Create Contact ✅
-* Get Contacts ✅
-* Update Contact ✅
-* Delete Contact ✅
-
+- Create Contact ✅
+- Get Contacts ✅
+- Update Contact ✅
+- Delete Contact ✅
 
 # 📄 Document API Documentation
 
@@ -416,9 +413,9 @@ http://localhost:5000/api/documents
 
 ## 🔐 Authentication
 
-* All routes are **protected**
-* Requires valid JWT stored in **HTTP-only cookies**
-* Frontend must send credentials with requests
+- All routes are **protected**
+- Requires valid JWT stored in **HTTP-only cookies**
+- Frontend must send credentials with requests
 
 ---
 
@@ -461,9 +458,9 @@ Create a new document.
 
 #### Notes
 
-* `title` and `fileUrl` are required
-* `owner` is automatically assigned from logged-in user
-* Default status is `draft`
+- `title` and `fileUrl` are required
+- `owner` is automatically assigned from logged-in user
+- Default status is `draft`
 
 ---
 
@@ -491,8 +488,8 @@ Fetch all documents created by the logged-in user.
 
 #### Notes
 
-* Documents are sorted by latest created
-* Only documents owned by the user are returned
+- Documents are sorted by latest created
+- Only documents owned by the user are returned
 
 ---
 
@@ -564,8 +561,8 @@ Update document details.
 
 #### Notes
 
-* Only document owner can update
-* Partial updates supported
+- Only document owner can update
+- Partial updates supported
 
 ---
 
@@ -594,33 +591,104 @@ Delete a document.
 
 ---
 
+### ✅ 6. Create Document from template
+
+**POST** `/from-template`
+
+Create a document from template.
+
+#### Request Body
+
+```json
+{
+  "templateId": "69ce520f96fac3c39b794fbf",
+  "title": "Updated NDA" // can overide
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "document": {
+    "title": "Content test",
+    "content": "<h1>This is content test</h1>",
+    "fileUrl": "https://dummy.pdf",
+    "owner": "69c299cd12a1d99c03a0f233",
+    "status": "draft",
+    "signers": [],
+    "widgets": [
+      {
+        "type": "signature",
+        "x": 100,
+        "y": 200,
+        "width": 150,
+        "height": 50,
+        "page": 1,
+        "signerIndex": 0,
+        "_id": "69ce520f96fac3c39b794fc0"
+      },
+      {
+        "type": "name",
+        "x": 50,
+        "y": 100,
+        "page": 1,
+        "signerIndex": 0,
+        "_id": "69ce520f96fac3c39b794fc1"
+      }
+    ],
+    "expiresAt": null,
+    "_id": "69d384f94985262d448dcac0",
+    "createdAt": "2026-04-06T10:03:37.945Z",
+    "updatedAt": "2026-04-06T10:03:37.945Z",
+    "__v": 0
+  }
+}
+```
+
+#### Errors
+
+```json
+{
+  "message": "template not found"
+}
+```
+
+```json
+{
+  "message": "templateId is required"
+}
+```
+
+---
+
 ## ⚠️ Important Notes
 
-* Each document is linked to a specific user (`owner`)
-* Only the owner can:
-
-  * View the document
-  * Update the document
-  * Delete the document
+- Each document is linked to a specific user (`owner`)
+- Only the owner can:
+  - View the document
+  - Update the document
+  - Delete the document
 
 ---
 
 ## 🔐 Security
 
-* Protected using authentication middleware
-* Prevents unauthorized access to documents
-* Ensures user-specific data isolation
+- Protected using authentication middleware
+- Prevents unauthorized access to documents
+- Ensures user-specific data isolation
 
 ---
 
 ## 🧪 Testing Tips
 
-* Login first to receive cookie
-* Use tools like Postman or frontend with:
+- Login first to receive cookie
+- Use tools like Postman or frontend with:
 
 ```js
 fetch(url, {
-  credentials: "include"
+  credentials: "include",
 });
 ```
 
@@ -630,10 +698,10 @@ fetch(url, {
 
 Documents are the core entity in the system:
 
-* Created by users
-* Assigned to signers
-* Sent for signing
-* Updated as signing progresses
+- Created by users
+- Assigned to signers
+- Sent for signing
+- Updated as signing progresses
 
 ---
 
@@ -641,11 +709,12 @@ Documents are the core entity in the system:
 
 All Document APIs are working:
 
-* Create Document ✅
-* Get Documents ✅
-* Get Single Document ✅
-* Update Document ✅
-* Delete Document ✅
+- Create Document ✅
+- Get Documents ✅
+- Get Single Document ✅
+- Update Document ✅
+- Delete Document ✅
+- Create Document from template
 
 # ✍️ Signer API Documentation
 
@@ -663,9 +732,9 @@ http://localhost:5000/api
 
 ## 🔐 Authentication
 
-* All routes are **protected**
-* Requires valid JWT stored in **HTTP-only cookies**
-* Frontend must send credentials with requests
+- All routes are **protected**
+- Requires valid JWT stored in **HTTP-only cookies**
+- Frontend must send credentials with requests
 
 ---
 
@@ -749,10 +818,10 @@ You can add a signer in two ways:
 
 ## 🧠 Notes
 
-* A signer represents a person who needs to sign the document
-* Signers are linked to a specific document
-* Default status is `pending`
-* Data is copied from contact (if used) to ensure immutability
+- A signer represents a person who needs to sign the document
+- Signers are linked to a specific document
+- Default status is `pending`
+- Data is copied from contact (if used) to ensure immutability
 
 ---
 
@@ -796,19 +865,19 @@ Fetch all signers assigned to a document.
 
 ## ⚠️ Important Notes
 
-* Only the document owner can:
+- Only the document owner can:
+  - Add signers
+  - View signers
 
-  * Add signers
-  * View signers
-* A document can have multiple signers
-* Signers are stored independently of contacts
+- A document can have multiple signers
+- Signers are stored independently of contacts
 
 ---
 
 ## 🔐 Security
 
-* Protected using authentication middleware
-* Ensures only authorized users can manage signers
+- Protected using authentication middleware
+- Ensures only authorized users can manage signers
 
 ---
 
@@ -824,9 +893,9 @@ Create Document → Add Signers → Send Document → Signers Sign
 
 Signers are used to:
 
-* Assign recipients for document signing
-* Track signing progress
-* Manage document workflow
+- Assign recipients for document signing
+- Track signing progress
+- Manage document workflow
 
 ---
 
@@ -834,8 +903,8 @@ Signers are used to:
 
 All Signer APIs are working:
 
-* Add Signer (manual + contact) ✅
-* Get Signers ✅
+- Add Signer (manual + contact) ✅
+- Get Signers ✅
 
 # 📑 Template API Documentation
 
@@ -853,9 +922,9 @@ http://localhost:5000/api/templates
 
 ## 🔐 Authentication
 
-* All routes are **protected**
-* Requires valid JWT stored in **HTTP-only cookies**
-* Frontend must send credentials with requests
+- All routes are **protected**
+- Requires valid JWT stored in **HTTP-only cookies**
+- Frontend must send credentials with requests
 
 ---
 
@@ -863,9 +932,9 @@ http://localhost:5000/api/templates
 
 A template is a **predefined document layout** that includes:
 
-* A file (PDF)
-* Widgets (fields like signature, name, etc.)
-* Positions for signing
+- A file (PDF)
+- Widgets (fields like signature, name, etc.)
+- Positions for signing
 
 Templates are used to quickly create documents.
 
@@ -929,9 +998,9 @@ Create a new template.
 
 #### Notes
 
-* `title` and `fileUrl` are required
-* `widgets` define field positions and types
-* `owner` is automatically assigned
+- `title` and `fileUrl` are required
+- `widgets` define field positions and types
+- `owner` is automatically assigned
 
 ---
 
@@ -1037,21 +1106,21 @@ Delete a template.
 
 ## ⚠️ Important Notes
 
-* Templates are **user-specific**
-* Only the owner can:
+- Templates are **user-specific**
+- Only the owner can:
+  - View templates
+  - Update templates
+  - Delete templates
 
-  * View templates
-  * Update templates
-  * Delete templates
-* Templates are reusable across multiple documents
+- Templates are reusable across multiple documents
 
 ---
 
 ## 🔐 Security
 
-* Protected using authentication middleware
-* Prevents unauthorized access
-* Ensures data isolation per user
+- Protected using authentication middleware
+- Prevents unauthorized access
+- Ensures data isolation per user
 
 ---
 
@@ -1065,12 +1134,12 @@ Create Template → Use Template → Create Document → Add Signers → Send �
 
 ## 🧪 Testing Tips
 
-* Login first to get cookie
-* Use Postman or frontend with:
+- Login first to get cookie
+- Use Postman or frontend with:
 
 ```js
 fetch(url, {
-  credentials: "include"
+  credentials: "include",
 });
 ```
 
@@ -1080,9 +1149,9 @@ fetch(url, {
 
 Templates help:
 
-* Save time when creating documents
-* Standardize signing layouts
-* Reuse common document formats
+- Save time when creating documents
+- Standardize signing layouts
+- Reuse common document formats
 
 ---
 
@@ -1090,8 +1159,8 @@ Templates help:
 
 All Template APIs are working:
 
-* Create Template ✅
-* Get Templates ✅
-* Get Single Template ✅
-* Update Template ✅
-* Delete Template ✅
+- Create Template ✅
+- Get Templates ✅
+- Get Single Template ✅
+- Update Template ✅
+- Delete Template ✅
