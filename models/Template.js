@@ -15,7 +15,6 @@ const templateSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    widgets: [widgetSchema],
 
     owner: {
       type: mongoose.Schema.Types.ObjectId,
