@@ -41,4 +41,4 @@ const widgetSchema = new mongoose.Schema({
   },
 });
 
-export default widgetSchema;
+export default mongoose.model("Widget", widgetSchema);

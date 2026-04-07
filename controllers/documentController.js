@@ -141,10 +141,6 @@ export const createDocumentFromTemplate = async (req, res) => {
       fileUrl: template.fileUrl || null,
       content: template.content || null,
       owner: req.user._id,
-
-      // IMPORTANT: copy widgets
-      widgets: template.widgets,
-
       status: "draft",
     });
 
