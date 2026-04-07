@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import widgetSchema from "./Widgets.js";
 
 const documentSchema = new mongoose.Schema(
   {
@@ -35,7 +34,6 @@ const documentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Template",
     },
-    widgets: [widgetSchema],
     expiresAt: {
       type: Date,
       default: null,

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import widgetSchema from "./Widgets.js";
 
 const templateSchema = new mongoose.Schema(
   {
