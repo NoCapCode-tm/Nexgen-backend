@@ -1164,3 +1164,224 @@ All Template APIs are working:
 - Get Single Template ✅
 - Update Template ✅
 - Delete Template ✅
+
+# 🧩 Widget API Documentation
+
+This section describes the APIs used to manage widgets (fields like signature, text, checkbox, etc.) for documents.
+
+---
+
+## 🌐 Base URL
+
+```
+http://localhost:5000/api/widgets
+```
+
+---
+
+## 🔐 Authentication
+
+- All routes are **protected**
+- Requires valid JWT stored in **HTTP-only cookies**
+- Frontend must send credentials with requests
+
+---
+
+## 🧠 What is a Widget?
+
+A widget represents a **field inside a document**, such as:
+
+- Signature
+- Text input
+- Checkbox
+- Date
+- Dropdown
+- Number input
+
+Widgets are linked to a specific document and define:
+
+- Position (x, y)
+- Page
+- Assigned signer
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Create Widget
+
+**POST** `/`
+
+Create a new widget for a document.
+
+---
+
+#### Request Body
+
+```json
+{
+  "documentId": "document_id",
+  "type": "signature",
+  "x": 100,
+  "y": 200,
+  "width": 150,
+  "height": 50,
+  "page": 1,
+  "signerIndex": 0
+}
+```
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "widget": {
+    "_id": "widget_id",
+    "document": "document_id",
+    "type": "signature",
+    "x": 100,
+    "y": 200,
+    "width": 150,
+    "height": 50,
+    "page": 1,
+    "signerIndex": 0,
+    "value": null
+  }
+}
+```
+
+---
+
+#### Notes
+
+- `documentId`, `type`, `page`, and `signerIndex` are required
+- `value` will be filled later during signing
+- Widget is linked to a specific document
+
+---
+
+### ✅ 2. Get Widgets by Document
+
+**GET** `/document/:id`
+
+Fetch all widgets for a specific document.
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "widgets": [
+    {
+      "_id": "widget_id",
+      "type": "signature",
+      "x": 100,
+      "y": 200,
+      "page": 1,
+      "signerIndex": 0,
+      "value": null
+    }
+  ]
+}
+```
+
+---
+
+#### Notes
+
+- Returns all widgets associated with the given document
+- Used to render fields on the frontend
+
+---
+
+### ✅ 3. Delete Widget
+
+**DELETE** `/:id`
+
+Delete a widget.
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Widget deleted"
+}
+```
+
+---
+
+#### Errors
+
+```json
+{
+  "message": "Widget not found"
+}
+```
+
+---
+
+## ⚠️ Important Notes
+
+- Widgets are stored in a **separate collection**
+- Each widget is linked to a document using `documentId`
+- Widgets define layout and structure of document fields
+- Widget values (like signature/text) are filled during signing
+
+---
+
+## 🔐 Security
+
+- Protected using authentication middleware
+- Only the document owner can create/delete widgets
+- Prevents unauthorized access
+
+---
+
+## 🔄 Workflow
+
+```text
+Create Document → Add Widgets → Send Document → Signers Fill Widgets → Complete Document
+```
+
+---
+
+## 🧪 Testing Tips
+
+- Login first to receive cookie
+- Use Postman or frontend with:
+
+```js
+fetch(url, {
+  credentials: "include",
+});
+```
+
+---
+
+## 🚀 Use Case
+
+Widgets are used to:
+
+- Define where users sign or input data
+- Render interactive fields on documents
+- Capture user input during signing
+
+---
+
+## ✅ Status
+
+All Widget APIs are working:
+
+- Create Widget ✅
+- Get Widgets by Document ✅
+- Delete Widget ✅
