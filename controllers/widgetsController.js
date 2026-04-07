@@ -64,27 +64,6 @@ export const getWidgetsByDocument = async (req, res) => {
   }
 };
 
-// Update Widget (for signature / fields)
-export const updateWidget = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { value } = req.body;
-
-    const widget = await Widget.findByIdAndUpdate(id, { value }, { new: true });
-
-    if (!widget) {
-      return res.status(404).json({ message: "Widget not found" });
-    }
-
-    res.json({
-      success: true,
-      widget,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 // Delete Widget (optional)
 export const deleteWidget = async (req, res) => {
   try {
