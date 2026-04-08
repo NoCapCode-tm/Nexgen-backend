@@ -6,6 +6,7 @@ import {
   updateDocument,
   deleteDocument,
   createDocumentFromTemplate,
+  completeDocument,
 } from "../controllers/documentController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -20,5 +21,6 @@ router.get("/:id", getDocumentById);
 router.patch("/:id", updateDocument);
 router.delete("/:id", deleteDocument);
 router.post("/from-template", createDocumentFromTemplate);
+router.patch("/:id/complete", completeDocument);
 
 export default router;
