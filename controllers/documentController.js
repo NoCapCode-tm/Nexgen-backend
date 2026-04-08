@@ -152,3 +152,50 @@ export const createDocumentFromTemplate = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// mark document as complete
+export const completeDocument = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // 1. find document
+    const document = await Document.findOne({
+      _id: id,
+      owner: req.user._id,
+    });
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    // 2. check if already completed
+    if (document.status === "completed") {
+      return res.status(400).json({
+        message: "Document already completed",
+      });
+    }
+
+    // 3. optional: only allow if sent
+    if (document.status !== "pending") {
+      return res.status(400).json({
+        message: "Document must be sent before completing",
+      });
+    }
+
+    // 4. mark completed
+    document.status = "completed";
+    await document.save();
+
+    res.json({
+      success: true,
+      message: "Document marked as completed",
+      document,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
