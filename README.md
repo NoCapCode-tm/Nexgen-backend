@@ -673,6 +673,66 @@ Create a document from template.
 
 ---
 
+### ✅ 7. Complete Document
+
+**PATCH** `/:id/complete`
+
+Mark a document as completed.
+
+---
+
+#### Description
+
+This API manually updates the document status to `completed`.
+It is used after the document has been sent and all required actions are finished.
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Document marked as completed",
+  "document": {
+    "_id": "document_id",
+    "status": "completed"
+  }
+}
+```
+
+---
+
+#### Errors
+
+```json
+{
+  "message": "Document not found"
+}
+```
+
+```json
+{
+  "message": "Document already completed"
+}
+```
+
+```json
+{
+  "message": "Document must be sent before completing"
+}
+```
+
+---
+
+#### Notes
+
+* Only the document owner can mark it as completed
+* Document must be in `pending` state before completion
+* This is a **manual completion trigger**
+* In a full system, completion would be automatic based on widget/signature status
+
+
 ## 🔐 Security
 
 - Protected using authentication middleware
