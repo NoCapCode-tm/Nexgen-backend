@@ -241,7 +241,7 @@ export const sendDocument = async (req, res) => {
 
     // 5. send email to each signer
     for (const signer of signers) {
-      const signingLink = `${process.env.CLIENT_URL}/sign/${document._id}/${signer._id}`;
+      const signingLink = `${process.env.REACT_PUBLIC_CLIENT}/sign/${document._id}/${signer._id}`;
 
       try {
         await sendEmail({

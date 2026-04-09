@@ -765,6 +765,127 @@ Documents are the core entity in the system:
 
 ---
 
+### ✅ 8. Send Document
+
+**POST** `/:id/send`
+
+Send a document to all assigned signers via email.
+
+---
+
+#### Description
+
+This API initiates the document signing process by:
+
+* Validating the document
+* Ensuring signers are assigned
+* Updating document status to `pending`
+* Sending email notifications to all signers with a signing link
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Document sent successfully",
+  "document": {
+    "_id": "document_id",
+    "status": "pending"
+  }
+}
+```
+
+---
+
+#### Errors
+
+```json
+{
+  "message": "Document not found"
+}
+```
+
+```json
+{
+  "message": "Document already sent or completed"
+}
+```
+
+```json
+{
+  "message": "Add at least one signer before sending"
+}
+```
+
+---
+
+#### Notes
+
+* Only the document owner can send the document
+* Document must be in `draft` state before sending
+* At least one signer must be added
+* Status is updated from `draft` → `pending`
+
+---
+
+#### 📧 Email Behavior
+
+* Emails are sent using **Nodemailer (SMTP)**
+* Each signer receives:
+
+  * Subject: *Document Signature Request*
+  * A unique signing link
+
+---
+
+#### 🔗 Signing Link Format
+
+```text
+{CLIENT_URL}/sign/:documentId/:signerId
+```
+
+Example:
+
+```text
+http://localhost:3000/sign/abc123/signer456
+```
+
+---
+
+#### ⚠️ Important Notes
+
+* Email failures for individual signers do not stop the API
+* Errors are logged in the server console
+* Email service is configurable via environment variables
+
+---
+
+#### 🔐 Environment Variables Required
+
+```env
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+CLIENT_URL=http://localhost:3000
+```
+
+---
+
+## 🔄 Workflow Integration
+
+```text
+Create Document → Add Signers → Add Widgets → Send Document → Sign → Complete
+```
+
+---
+
+## ✅ Status
+
+* Send Document API ✅
+* Email Notifications via Nodemailer ✅
+
+
 ## ✅ Status
 
 All Document APIs are working:
@@ -775,6 +896,8 @@ All Document APIs are working:
 - Update Document ✅
 - Delete Document ✅
 - Create Document from template
+- Document Complete
+- Document Send
 
 # ✍️ Signer API Documentation
 
