@@ -1,5 +1,7 @@
 import { Document } from "../models/Document.js";
 import Template from "../models/Template.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import Signer from "../models/Signer.js";
 
 // Create Document
 export const createDocument = async (req, res) => {
@@ -191,6 +193,74 @@ export const completeDocument = async (req, res) => {
     res.json({
       success: true,
       message: "Document marked as completed",
+      document,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// sent document to signer
+export const sendDocument = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // 1. find document
+    const document = await Document.findOne({
+      _id: id,
+      owner: req.user._id,
+    });
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    // 2. check status
+    if (document.status !== "draft") {
+      return res.status(400).json({
+        message: "Document already sent or completed",
+      });
+    }
+
+    // 3. get signers
+    const signers = await Signer.find({ document: id });
+
+    if (!signers.length) {
+      return res.status(400).json({
+        message: "Add at least one signer before sending",
+      });
+    }
+
+    // 4. update status
+    document.status = "pending";
+    await document.save();
+
+    // 5. send email to each signer
+    for (const signer of signers) {
+      const signingLink = `${process.env.CLIENT_URL}/sign/${document._id}/${signer._id}`;
+
+      try {
+        await sendEmail({
+          to: signer.email,
+          subject: "Document Signature Request",
+          html: `
+            <h2>You have been requested to sign a document</h2>
+            <p>Please click the link below:</p>
+            <a href="${signingLink}">Sign Document</a>
+          `,
+        });
+      } catch (err) {
+        console.error("Email failed for:", signer.email);
+      }
+    }
+
+    res.json({
+      success: true,
+      message: "Document sent successfully",
       document,
     });
   } catch (err) {
