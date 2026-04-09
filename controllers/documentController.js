@@ -254,6 +254,7 @@ export const sendDocument = async (req, res) => {
           `,
         });
       } catch (err) {
+        console.error(err);
         console.error("Email failed for:", signer.email);
       }
     }
@@ -262,6 +263,7 @@ export const sendDocument = async (req, res) => {
       success: true,
       message: "Document sent successfully",
       document,
+      signers: signers.map((s) => s.email),
     });
   } catch (err) {
     res.status(500).json({

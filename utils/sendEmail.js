@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.nocapcode.cloud",
+  host: "smtp.nocapcode.clou",
   port: 587,
   secure: false,
   auth: {
