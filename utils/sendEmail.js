@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.nocapcode.clou",
+  host: "nocapcode.cloud",
   port: 587,
   secure: false,
   auth: {
@@ -9,6 +9,8 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+
+await transporter.verify();
 
 export const sendEmail = async ({ to, subject, html }) => {
   await transporter.sendMail({
