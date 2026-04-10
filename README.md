@@ -1568,3 +1568,169 @@ All Widget APIs are working:
 - Create Widget ✅
 - Get Widgets by Document ✅
 - Delete Widget ✅
+
+# ✍️ Signature API Documentation
+
+This section describes the APIs used to handle document signing.
+
+---
+
+## 🌐 Base URL
+
+```id="sig1"
+http://localhost:5000/api/signatures
+```
+
+---
+
+## 🔓 Authentication
+
+* This API is **public (no authentication required)**
+* Signers can sign documents using a secure link
+* No login is required for signing
+
+---
+
+## 🧠 What is a Signature?
+
+A signature represents a signer’s approval on a document.
+
+It includes:
+
+* Signature image (URL)
+* Position (x, y, width, height)
+* Page number
+* Associated document and signer
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Create Signature
+
+**POST** `/`
+
+Save a signature for a document.
+
+---
+
+#### Request Body
+
+```json id="sig2"
+{
+  "documentId": "document_id",
+  "signerId": "signer_id",
+  "page": 1,
+  "x": 100,
+  "y": 200,
+  "width": 150,
+  "height": 50,
+  "signatureImageUrl": "https://example.com/signature.png"
+}
+```
+
+---
+
+#### Response
+
+```json id="sig3"
+{
+  "success": true,
+  "message": "Signature saved",
+  "signature": {
+    "_id": "signature_id",
+    "document": "document_id",
+    "signer": "signer_id",
+    "signatureImageUrl": "https://example.com/signature.png"
+  },
+  "documentStatus": "completed"
+}
+```
+
+---
+
+#### Errors
+
+```json id="sig4"
+{
+  "message": "documentId, signerId and signatureImageUrl are required"
+}
+```
+
+```json id="sig5"
+{
+  "message": "Document not found"
+}
+```
+
+```json id="sig6"
+{
+  "message": "Invalid signer"
+}
+```
+
+```json id="sig7"
+{
+  "message": "Signer already signed"
+}
+```
+
+---
+
+## 🔐 Security
+
+* No authentication required
+* Security is enforced by:
+
+  * Validating signer belongs to document
+  * Preventing duplicate signatures
+  * Using unique signing links
+
+---
+
+## 🔄 Workflow
+
+```text id="sig8"
+Send Document → Signer receives email → Opens link → Submits signature → Document updated
+```
+
+---
+
+## ⚙️ Internal Behavior
+
+When a signature is created:
+
+```text id="sig9"
+1. Signature is stored in database
+2. Signer status is updated → "signed"
+3. If all signers have signed:
+   → Document status is updated → "completed"
+```
+
+---
+
+## 🧪 Testing Tips
+
+* Use IDs from email signing link
+* Test with multiple signers
+* Use any valid image URL for signature
+
+---
+
+## 🚀 Use Case
+
+Signature API enables:
+
+* External users to sign documents
+* Tracking of signer activity
+* Completion of document workflows
+
+---
+
+## ✅ Status
+
+* Create Signature API implemented ✅
+* Auto-complete document logic implemented ✅
+* Public access (no auth required) ✅
