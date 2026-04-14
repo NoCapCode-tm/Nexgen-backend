@@ -673,6 +673,66 @@ Create a document from template.
 
 ---
 
+### ✅ 7. Complete Document
+
+**PATCH** `/:id/complete`
+
+Mark a document as completed.
+
+---
+
+#### Description
+
+This API manually updates the document status to `completed`.
+It is used after the document has been sent and all required actions are finished.
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Document marked as completed",
+  "document": {
+    "_id": "document_id",
+    "status": "completed"
+  }
+}
+```
+
+---
+
+#### Errors
+
+```json
+{
+  "message": "Document not found"
+}
+```
+
+```json
+{
+  "message": "Document already completed"
+}
+```
+
+```json
+{
+  "message": "Document must be sent before completing"
+}
+```
+
+---
+
+#### Notes
+
+* Only the document owner can mark it as completed
+* Document must be in `pending` state before completion
+* This is a **manual completion trigger**
+* In a full system, completion would be automatic based on widget/signature status
+
+
 ## 🔐 Security
 
 - Protected using authentication middleware
@@ -705,6 +765,127 @@ Documents are the core entity in the system:
 
 ---
 
+### ✅ 8. Send Document
+
+**POST** `/:id/send`
+
+Send a document to all assigned signers via email.
+
+---
+
+#### Description
+
+This API initiates the document signing process by:
+
+* Validating the document
+* Ensuring signers are assigned
+* Updating document status to `pending`
+* Sending email notifications to all signers with a signing link
+
+---
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Document sent successfully",
+  "document": {
+    "_id": "document_id",
+    "status": "pending"
+  }
+}
+```
+
+---
+
+#### Errors
+
+```json
+{
+  "message": "Document not found"
+}
+```
+
+```json
+{
+  "message": "Document already sent or completed"
+}
+```
+
+```json
+{
+  "message": "Add at least one signer before sending"
+}
+```
+
+---
+
+#### Notes
+
+* Only the document owner can send the document
+* Document must be in `draft` state before sending
+* At least one signer must be added
+* Status is updated from `draft` → `pending`
+
+---
+
+#### 📧 Email Behavior
+
+* Emails are sent using **Nodemailer (SMTP)**
+* Each signer receives:
+
+  * Subject: *Document Signature Request*
+  * A unique signing link
+
+---
+
+#### 🔗 Signing Link Format
+
+```text
+{CLIENT_URL}/sign/:documentId/:signerId
+```
+
+Example:
+
+```text
+http://localhost:3000/sign/abc123/signer456
+```
+
+---
+
+#### ⚠️ Important Notes
+
+* Email failures for individual signers do not stop the API
+* Errors are logged in the server console
+* Email service is configurable via environment variables
+
+---
+
+#### 🔐 Environment Variables Required
+
+```env
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+CLIENT_URL=http://localhost:3000
+```
+
+---
+
+## 🔄 Workflow Integration
+
+```text
+Create Document → Add Signers → Add Widgets → Send Document → Sign → Complete
+```
+
+---
+
+## ✅ Status
+
+* Send Document API ✅
+* Email Notifications via Nodemailer ✅
+
+
 ## ✅ Status
 
 All Document APIs are working:
@@ -715,6 +896,8 @@ All Document APIs are working:
 - Update Document ✅
 - Delete Document ✅
 - Create Document from template
+- Document Complete
+- Document Send
 
 # ✍️ Signer API Documentation
 
@@ -1385,3 +1568,169 @@ All Widget APIs are working:
 - Create Widget ✅
 - Get Widgets by Document ✅
 - Delete Widget ✅
+
+# ✍️ Signature API Documentation
+
+This section describes the APIs used to handle document signing.
+
+---
+
+## 🌐 Base URL
+
+```id="sig1"
+http://localhost:5000/api/signatures
+```
+
+---
+
+## 🔓 Authentication
+
+* This API is **public (no authentication required)**
+* Signers can sign documents using a secure link
+* No login is required for signing
+
+---
+
+## 🧠 What is a Signature?
+
+A signature represents a signer’s approval on a document.
+
+It includes:
+
+* Signature image (URL)
+* Position (x, y, width, height)
+* Page number
+* Associated document and signer
+
+---
+
+## 📌 Endpoints
+
+---
+
+### ✅ 1. Create Signature
+
+**POST** `/`
+
+Save a signature for a document.
+
+---
+
+#### Request Body
+
+```json id="sig2"
+{
+  "documentId": "document_id",
+  "signerId": "signer_id",
+  "page": 1,
+  "x": 100,
+  "y": 200,
+  "width": 150,
+  "height": 50,
+  "signatureImageUrl": "https://example.com/signature.png"
+}
+```
+
+---
+
+#### Response
+
+```json id="sig3"
+{
+  "success": true,
+  "message": "Signature saved",
+  "signature": {
+    "_id": "signature_id",
+    "document": "document_id",
+    "signer": "signer_id",
+    "signatureImageUrl": "https://example.com/signature.png"
+  },
+  "documentStatus": "completed"
+}
+```
+
+---
+
+#### Errors
+
+```json id="sig4"
+{
+  "message": "documentId, signerId and signatureImageUrl are required"
+}
+```
+
+```json id="sig5"
+{
+  "message": "Document not found"
+}
+```
+
+```json id="sig6"
+{
+  "message": "Invalid signer"
+}
+```
+
+```json id="sig7"
+{
+  "message": "Signer already signed"
+}
+```
+
+---
+
+## 🔐 Security
+
+* No authentication required
+* Security is enforced by:
+
+  * Validating signer belongs to document
+  * Preventing duplicate signatures
+  * Using unique signing links
+
+---
+
+## 🔄 Workflow
+
+```text id="sig8"
+Send Document → Signer receives email → Opens link → Submits signature → Document updated
+```
+
+---
+
+## ⚙️ Internal Behavior
+
+When a signature is created:
+
+```text id="sig9"
+1. Signature is stored in database
+2. Signer status is updated → "signed"
+3. If all signers have signed:
+   → Document status is updated → "completed"
+```
+
+---
+
+## 🧪 Testing Tips
+
+* Use IDs from email signing link
+* Test with multiple signers
+* Use any valid image URL for signature
+
+---
+
+## 🚀 Use Case
+
+Signature API enables:
+
+* External users to sign documents
+* Tracking of signer activity
+* Completion of document workflows
+
+---
+
+## ✅ Status
+
+* Create Signature API implemented ✅
+* Auto-complete document logic implemented ✅
+* Public access (no auth required) ✅
